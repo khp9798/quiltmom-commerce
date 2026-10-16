@@ -83,18 +83,18 @@ export default function Home() {
           {categories.map((item) => <button key={item} className={category === item ? "active" : ""} onClick={() => setCategory(item)} role="tab" aria-selected={category === item}>{item}</button>)}
         </div>
         <div className="product-grid">
-          {filtered.map((product, index) => (
+          {filtered.map((product) => (
             <article className="product-card" key={product.id}>
               <div className="product-image">
                 <img src={product.image} alt={product.name} />
                 <span className="product-tag">{product.tag}</span>
                 <button className={saved.includes(product.id) ? "heart saved" : "heart"} onClick={() => toggleSaved(product.id)} aria-label={`${product.name} 찜하기`}>{saved.includes(product.id) ? "♥" : "♡"}</button>
               </div>
-              <div className="product-info"><span>{product.category}</span><h3>{product.name}</h3><a href={`https://www.instagram.com/quiltmom_jeju/`} target="_blank" rel="noreferrer">가격 · 주문 문의 <b>↗</b></a></div>
+              <div className="product-info"><span>{product.category}</span><h3>{product.name}</h3><p>온라인 판매 준비 중</p></div>
             </article>
           ))}
         </div>
-        <p className="catalog-note">작품은 인스타그램에 가장 먼저 소개됩니다.</p>
+        <p className="catalog-note">현재 상품명과 분류는 온라인몰 구성을 위한 임시 정보이며, 실제 판매 정보는 오픈 전에 확정됩니다.</p>
       </section>
 
       <section className="story-section" id="story">
@@ -113,13 +113,13 @@ export default function Home() {
       </section>
 
       <section className="order-section" id="order">
-        <div><p className="eyebrow">HOW TO ORDER</p><h2>마음에 드는 작품을<br />발견하셨나요?</h2></div>
+        <div><p className="eyebrow">ONLINE STORE</p><h2>온라인 스토어를<br />준비하고 있어요</h2></div>
         <ol>
           <li><b>01</b><span><strong>작품 고르기</strong>찜 버튼으로 마음에 드는 작품을 모아보세요.</span></li>
-          <li><b>02</b><span><strong>문의하기</strong>인스타그램 DM으로 작품명과 수량을 보내주세요.</span></li>
-          <li><b>03</b><span><strong>제작 · 배송</strong>재고와 제작 기간, 결제 및 배송을 안내해드려요.</span></li>
+          <li><b>02</b><span><strong>온라인 주문</strong>오픈 후에는 옵션과 수량을 선택해 장바구니에서 주문할 수 있어요.</span></li>
+          <li><b>03</b><span><strong>결제 · 배송</strong>안전한 온라인 결제와 주문 상태 확인 기능을 제공할 예정이에요.</span></li>
         </ol>
-        <a className="primary-button dark" href="https://www.instagram.com/quiltmom_jeju/" target="_blank" rel="noreferrer">DM으로 주문 문의 <span>↗</span></a>
+        <span className="primary-button dark pending-button">온라인 판매 준비 중 <span>•••</span></span>
       </section>
 
       <footer>
@@ -129,13 +129,14 @@ export default function Home() {
         <small>© 2026 QUILTMOM. All rights reserved.</small>
       </footer>
 
-      {savedOpen && <div className="drawer-backdrop" onClick={() => setSavedOpen(false)}>
-        <aside className="saved-drawer" onClick={(e) => e.stopPropagation()} aria-label="찜한 작품">
+      {savedOpen && <div className="drawer-backdrop">
+        <button className="drawer-dismiss" onClick={() => setSavedOpen(false)} aria-label="찜 목록 닫기" />
+        <aside className="saved-drawer" aria-label="찜한 작품">
           <div className="drawer-head"><div><p>MY PICKS</p><h2>찜한 작품</h2></div><button onClick={() => setSavedOpen(false)} aria-label="닫기">×</button></div>
           {savedProducts.length === 0 ? <div className="empty-saved"><span>♡</span><p>아직 찜한 작품이 없어요.<br />마음에 드는 작품의 하트를 눌러보세요.</p></div> : <div className="saved-list">
             {savedProducts.map((product) => <div key={product.id}><img src={product.image} alt="" /><span><small>{product.category}</small><strong>{product.name}</strong></span><button onClick={() => toggleSaved(product.id)}>삭제</button></div>)}
           </div>}
-          <a className="primary-button dark drawer-cta" href="https://www.instagram.com/quiltmom_jeju/" target="_blank" rel="noreferrer">DM으로 문의하기 <span>↗</span></a>
+          <span className="primary-button dark drawer-cta pending-button">온라인 판매 준비 중 <span>•••</span></span>
         </aside>
       </div>}
     </main>

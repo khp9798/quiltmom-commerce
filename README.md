@@ -1,100 +1,39 @@
-# vinext-starter
+# 퀼트맘 온라인 쇼핑몰
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+오프라인과 위탁 판매 중심의 제주 수공예 브랜드 **퀼트맘**을 위한 실제 운영형 온라인 쇼핑몰 프로젝트입니다. 현재는 브랜드와 상품을 탐색하는 프론트엔드 MVP이며, 이후 Java/Spring Boot 서버를 연결해 상품·주문·결제·재고를 다루는 커머스로 확장합니다.
 
-## Prerequisites
+## 현재 제공하는 기능
 
-- Node.js `>=22.13.0`
+- 반응형 브랜드 및 상품 카탈로그
+- 카테고리별 상품 필터
+- 현재 접속 중에 유지되는 찜 목록
+- 온라인 스토어 준비 상태 안내
 
-## Quick Start
+현재 상품명과 분류는 화면 구성을 위한 임시 데이터입니다. 실제 상품 정보와 온라인 주문·결제는 운영 자료와 정책이 확정된 뒤 적용합니다.
+
+## 기술 선택
+
+- **React + TypeScript**: 화면 상태와 사용자 상호작용을 타입 안전하게 구현
+- **Vinext/Vite**: 현재 Sites 배포 환경과 호환되는 프론트엔드 빌드
+- **Java 21 + Spring Boot (예정)**: 주문·결제·재고의 트랜잭션과 서버 규칙 담당
+- **관계형 데이터베이스 (예정)**: 상품, 옵션, 주문, 결제, 재고 사이의 관계와 정합성 보장
+
+## 실행 및 검증
+
+요구 사항은 Node.js `22.13.0` 이상입니다.
 
 ```bash
 npm install
 npm run dev
-npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+- `npm run build`: 배포 가능한 결과물 생성
+- `npm test`: 빌드 후 핵심 운영 문구와 화면 구조 검증
+- `npm run lint`: 코드 규칙과 접근성 관련 정적 검사
 
-## Included Shape
+## 개발 원칙
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Email and name are intended for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
-```
-
-## Optional Dispatch-Owned ChatGPT Sign-In
-
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
-
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
-
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+- 정식 오픈 전에는 무료 개발·테스트 환경만 사용합니다.
+- 금액과 재고는 클라이언트 값을 신뢰하지 않고 서버에서 다시 검증합니다.
+- 주문 생성, 재고 차감, 결제 결과 반영의 실패 상황을 테스트합니다.
+- 유료 서비스는 예상 비용과 무료 대안을 검토하고 명시적 승인 후 도입합니다.
