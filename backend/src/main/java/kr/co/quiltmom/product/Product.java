@@ -8,7 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -35,11 +37,4 @@ public class Product {
 
 	protected Product() {
 	}
-
-	public Long getId() { return id; }
-	public String getName() { return name; }
-	public ProductCategory getCategory() { return category; }
-	public long getPrice() { return price; }
-	public String getImageUrl() { return imageUrl; }
-	public boolean isSellable() { return sellable; }
 }
