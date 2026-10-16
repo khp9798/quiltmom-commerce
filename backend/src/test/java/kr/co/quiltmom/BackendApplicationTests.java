@@ -23,8 +23,12 @@ class BackendApplicationTests {
 		HttpResponse<String> response = get("/api/products");
 
 		assertThat(response.statusCode()).isEqualTo(200);
-		assertThat(response.body()).contains("동백 패치워크 가방 (임시)");
+		assertThat(response.body()).contains("붉은 동백 패치워크 가방 (임시)");
+		assertThat(response.body()).contains("푸른 체크 패치워크 가방 (임시)");
 		assertThat(response.body()).contains("\"category\":\"BAG\"");
+		assertThat(response.body()).contains("\"stockQuantity\":1");
+		assertThat(response.body()).contains("\"status\":\"ON_SALE\"");
+		assertThat(response.body()).contains("\"status\":\"SOLD_OUT\"");
 	}
 
 	@Test

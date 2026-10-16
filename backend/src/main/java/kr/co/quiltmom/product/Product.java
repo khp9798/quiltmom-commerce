@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Getter;
 
 @Getter
@@ -32,8 +33,15 @@ public class Product {
 	@Column(name = "image_url", nullable = false)
 	private String imageUrl;
 
+	@Column(name = "stock_quantity", nullable = false)
+	private int stockQuantity;
+
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private boolean sellable;
+	private ProductStatus status;
+
+	@Version
+	private long version;
 
 	protected Product() {
 	}

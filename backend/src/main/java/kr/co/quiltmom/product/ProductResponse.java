@@ -6,10 +6,11 @@ public record ProductResponse(
 	ProductCategory category,
 	long price,
 	String imageUrl,
-	boolean sellable
+	int stockQuantity,
+	ProductStatus status
 ) {
 	public static ProductResponse from(Product product) {
 		return new ProductResponse(product.getId(), product.getName(), product.getCategory(),
-			product.getPrice(), product.getImageUrl(), product.isSellable());
+			product.getPrice(), product.getImageUrl(), product.getStockQuantity(), product.getStatus());
 	}
 }
