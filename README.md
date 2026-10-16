@@ -21,6 +21,23 @@
 - **Java 21 + Spring Boot (예정)**: 주문·결제·재고의 트랜잭션과 서버 규칙 담당
 - **관계형 데이터베이스 (예정)**: 상품, 옵션, 주문, 결제, 재고 사이의 관계와 정합성 보장
 
+## 백엔드 요청 흐름
+
+```text
+GET /api/products
+  → ProductController
+  → ProductService
+  → ProductRepository
+  → H2 개발용 데이터베이스
+  → ProductResponse JSON
+```
+
+- **Controller**: HTTP 주소와 요청·응답 형식을 담당
+- **Service**: 상품 조회 규칙과 트랜잭션 경계를 담당
+- **Repository**: JPA를 통해 데이터베이스 조회를 담당
+- **Entity**: 데이터베이스의 상품 행을 Java 객체로 표현
+- **Response DTO**: 외부에 공개할 API 응답 형태를 Entity와 분리
+
 ## 실행 및 검증
 
 요구 사항은 Node.js `22.13.0` 이상입니다.
@@ -29,6 +46,17 @@
 npm install
 npm run dev
 ```
+
+백엔드는 JDK 21을 사용합니다.
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+- `GET /api/products`: 전체 상품 조회
+- `GET /api/products/{productId}`: 상품 한 건 조회
+- `GET /actuator/health`: 서버 상태 확인
 
 - `npm run build`: 배포 가능한 결과물 생성
 - `npm test`: 빌드 후 핵심 운영 문구와 화면 구조 검증
